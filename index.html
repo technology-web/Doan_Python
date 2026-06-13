@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Manager - PyScript</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="app-container glass-panel">
+        <header>
+            <div class="logo">
+                <h1>Quản Lý Sản Phẩm</h1>
+                <span class="subtitle">Powered by PyScript & WebAssembly</span>
+            </div>
+            <div class="stats">
+                <div class="stat-box">
+                    <span class="stat-label">Tổng SP</span>
+                    <span class="stat-value" id="total-count">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Tổng Giá Trị Kho</span>
+                    <span class="stat-value highlight-value" id="total-value">0 đ</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Doanh Thu</span>
+                    <span class="stat-value" id="total-revenue" style="color: #10b981;">0 đ</span>
+                </div>
+            </div>
+        </header>
+        
+        <main>
+            <section class="add-product-section">
+                <h2>Thêm Sản Phẩm Mới</h2>
+                <div class="form-group">
+                    <input type="text" id="product-name" placeholder="Tên sản phẩm..." />
+                    <input type="number" id="product-price" placeholder="Giá (VNĐ)..." />
+                    <input type="number" id="product-quantity" placeholder="Số lượng..." />
+                    <button id="add-btn" class="primary-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Thêm Ngay
+                    </button>
+                </div>
+                <div id="error-message" class="error-text"></div>
+            </section>
+            
+            <section class="product-list-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <h2 style="margin-bottom: 0;">Danh Sách Kho Hàng</h2>
+                    <input type="text" id="search-input" placeholder="🔍 Tìm kiếm sản phẩm..." style="width: 300px; padding: 0.8rem 1.25rem; margin-bottom: 0;" />
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="5%">ID</th>
+                                <th width="35%">Tên Sản Phẩm</th>
+                                <th width="20%">Đơn Giá</th>
+                                <th width="15%">Số Lượng</th>
+                                <th width="15%">Thành Tiền</th>
+                                <th width="10%">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="history-tabs">
+                <button class="tab-btn active" onclick="switchTab('orders', this)">📦 Lịch Sử Bán Hàng</button>
+                <button class="tab-btn" onclick="switchTab('reports', this)">📈 Báo Cáo Doanh Số</button>
+                <button class="tab-btn" onclick="switchTab('deleted', this)">🗑️ Sản Phẩm Đã Xóa</button>
+            </div>
+
+            <section id="tab-orders" class="history-section active-section orders-section" style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <h2 style="margin-bottom: 0;">Lịch Sử Đơn Hàng (Đã Bán)</h2>
+                    <input type="text" id="search-order" placeholder="🔍 Tìm kiếm mã đơn hoặc tên..." style="width: 300px; padding: 0.8rem 1.25rem; margin-bottom: 0;" />
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="15%">Mã Đơn</th>
+                                <th width="35%">Tên Sản Phẩm</th>
+                                <th width="15%">Số Lượng</th>
+                                <th width="15%">Đơn Giá</th>
+                                <th width="20%">Tổng Tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="tab-reports" class="history-section reports-section" style="margin-top: 1.5rem;">
+                <h2>Báo Cáo & Thống Kê Doanh Số</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="40%">Tên Sản Phẩm</th>
+                                <th width="20%">Đã Bán</th>
+                                <th width="25%">Doanh Thu</th>
+                                <th width="15%">Lần Kiểm Kê</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="tab-deleted" class="history-section" style="margin-top: 1.5rem;">
+                <h2>Lịch Sử Sản Phẩm Đã Xóa</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="50%">Tên Sản Phẩm</th> 
+                                <th width="30%">Giá</th>
+                                <th width="20%">Số Lượng</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deleted-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function switchTab(tabName, element) {
+            // 1. Ẩn tất cả các section lịch sử
+            document.querySelectorAll('.history-section').forEach(sec => {
+                sec.classList.remove('active-section');
+            });
+            // 2. Hiện section được chọn
+            const targetSection = document.getElementById('tab-' + tabName);
+            if (targetSection) {
+                targetSection.classList.add('active-section');
+            }
+            
+            // 3. Đổi trạng thái active của nút bấm một cách an toàn
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            if (element) {
+                element.classList.add('active');
+            }
+        }
+    </script>
+
+    <script type="py" src="./main.py"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Ứng dụng đã sẵn sàng chạy Offline!', reg))
+                    .catch(err => console.log('Lỗi đăng ký chạy offline:', err));
+            });
+        }
+    </script>
+
+
+    <div id="quantity-modal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3 id="modal-title">Xác Nhận Số Lượng</h3>
+                <button class="close-modal-btn" onclick="document.getElementById('quantity-modal').classList.remove('open')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-product-info" style="margin-bottom: 0.5rem;">Sản phẩm: <span id="modal-p-name" class="highlight-text" style="font-weight: 600;">...</span></p>
+                <p id="modal-stock-info" style="color: var(--text-secondary); font-size: 0.9rem;">Số lượng hiện có: <span id="modal-p-stock" style="color: var(--text-primary); font-weight: 500;">0</span></p>
+                
+                <div style="margin-top: 1.5rem;">
+                    <label for="modal-quantity-input" style="font-size: 0.8rem; color: var(--text-secondary); display: block; margin-bottom: 0.5rem; letter-spacing: 1px;">NHẬP SỐ LƯỢNG THAO TÁC:</label>
+                    <input type="number" id="modal-quantity-input" min="1" value="1" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.25); border: 1px solid var(--glass-border); border-radius: 10px; color: white; text-align: center; font-size: 1.25rem; font-weight: 700; outline: none;" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="tab-btn" style="margin: 0 !important;" onclick="document.getElementById('quantity-modal').classList.remove('open')">Hủy</button>
+                <button id="modal-confirm-btn" class="primary-btn" style="padding: 0.75rem 1.75rem;">Xác Nhận</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
