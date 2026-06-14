@@ -320,12 +320,7 @@
         }
       }
 
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("./sw.js")
-          .then(() => console.log("Service Worker hoạt động ổn định."))
-          .catch((err) => console.log("Lỗi SW:", err));
-      }
+      
     </script>
 
     <script type="py" src="./main.py"></script>

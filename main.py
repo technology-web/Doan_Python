@@ -236,7 +236,7 @@ def render_orders_table():
     search_val = document.getElementById("search-order").value.strip().lower() if document.getElementById("search-order") else ""
     
     for o in reversed(orders):
-        # Sử dụng .get() để tránh lỗi KeyError an toàn tuyệt đối
+        # Sử dụng .get() để chống sập giao diện khi dữ liệu thiếu trường
         order_id = o.get('id', '')
         order_name = o.get('name', '')
         order_time = o.get('time', 'Không rõ')
@@ -328,6 +328,9 @@ def render_orders_table():
         tr.appendChild(td_status)
         tr.appendChild(td_act)
         tbody.appendChild(tr)
+
+
+        
 def handle_search_product(e):
     render_tables()
 
