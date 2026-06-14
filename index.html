@@ -90,21 +90,21 @@
           <div class="stat-mini-card">
             <div class="stat-info">
               <span class="stat-label">Tổng Mặt Hàng</span>
-              <span class="stat-value" id="total-count">0</span>
+              <span class="stat-value" id="total-products-qty">0 cái</span>
             </div>
             <i class="fa-solid fa-box stat-icon-bg"></i>
           </div>
           <div class="stat-mini-card">
             <div class="stat-info">
-              <span class="stat-label">Doanh Tư Khác</span>
-              <span class="stat-value text-blue" id="total-value">0 đ</span>
+              <span class="stat-label">Tổng Loại Hàng</span>
+              <span class="stat-value text-blue" id="total-products-count">0 dòng</span>
             </div>
             <i class="fa-solid fa-money-bill-trend-up stat-icon-bg"></i>
           </div>
           <div class="stat-mini-card">
             <div class="stat-info">
-              <span class="stat-label">Thanh Toán Điện Tử</span>
-              <span class="stat-value text-green" id="total-revenue">0 đ</span>
+              <span class="stat-label">Doanh Thu Hệ Thống</span>
+              <span class="stat-value text-green" id="total-products-value">0 đ</span>
             </div>
             <i class="fa-solid fa-circle-dollar-to-slot stat-icon-bg"></i>
           </div>
@@ -133,14 +133,14 @@
                 <thead>
                   <tr>
                     <th width="15%">THỜI GIAN</th>
-                    <th width="30%">MẶT HÀNG</th>
-                    <th width="8%">SL</th>
-                    <th width="15%">ĐƠN GIÁ</th>
-                    <th width="15%">TRẠNG THÁI</th> <!-- Thêm mới cột Trạng thái -->
-                    <th width="17%">THAO TÁC</th>
+                    <th width="15%">MÃ ĐƠN</th>
+                    <th width="25%">NỘI DUNG CHI TIẾT</th>
+                    <th width="15%">GIÁ TRỊ ĐƠN</th>
+                    <th width="15%">TRẠNG THÁI</th>
+                    <th width="15%">THAO TÁC</th>
                   </tr>
                 </thead>
-                <tbody id="order-tbody"></tbody>
+                <tbody id="orders-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -149,8 +149,7 @@
         <section id="tab-products" class="dashboard-section">
           <div class="management-card" style="margin-bottom: 2rem">
             <h3>
-              <i class="fa-solid fa-circle-plus color-green"></i> Tạo Mặt Hàng
-              Mới Lên Hệ Thống
+              <i class="fa-solid fa-circle-plus color-green"></i> Tạo Mặt Hàng Mới Lên Hệ Thống
             </h3>
             <div class="form-group">
               <input
@@ -172,7 +171,6 @@
                 <i class="fa-solid fa-plus"></i> Thêm Mặt Hàng
               </button>
             </div>
-            <div id="error-message" class="error-text"></div>
           </div>
 
           <div class="management-card">
@@ -188,11 +186,10 @@
               <table>
                 <thead>
                   <tr>
-                    <th width="8%">ID</th>
-                    <th width="42%">Tên Sản Phẩm Công Nghệ</th>
-                    <th width="20%">Đơn Giá</th>
-                    <th width="15%">Trạng Thái</th>
-                    <th width="15%">Thao Tác</th>
+                    <th>Tên Sản Phẩm Công Nghệ</th>
+                    <th>Đơn Giá</th>
+                    <th>Số Lượng Tồn</th>
+                    <th>Thao Tác Nghiệp Vụ</th>
                   </tr>
                 </thead>
                 <tbody id="product-tbody"></tbody>
@@ -203,34 +200,14 @@
 
         <section id="tab-inventory" class="dashboard-section">
           <div class="management-card">
-            <div class="table-container">
+            <h3><i class="fa-solid fa-warehouse"></i> Thùng Rác Biến Động</h3>
+            <div class="table-container" style="margin-top: 1rem;">
               <table>
                 <thead>
                   <tr>
-                    <th width="8%">ID</th>
-                    <th width="42%">Tên Sản Phẩm Trong Kho</th>
-                    <th width="15%">Số Lượng Tồn Kho</th>
-                    <th width="15%">Giá Trị Tồn</th>
-                    <th width="20%">Thao Tác</th>
-                  </tr>
-                </thead>
-                <tbody id="inventory-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="management-card" style="margin-top: 2rem">
-            <h3>
-              <i class="fa-solid fa-trash-can text-danger"></i> Nhật Ký Sản Phẩm
-              Đã Hủy
-            </h3>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th width="50%">Tên Sản Phẩm Đã Hủy</th>
-                    <th width="30%">Đơn Giá Lúc Xóa</th>
-                    <th width="20%">Số Lượng</th>
+                    <th>Tên Sản Phẩm Đã Hủy</th>
+                    <th>Đơn Giá Lúc Xóa</th>
+                    <th>Số Lượng Thu Hồi</th>
                   </tr>
                 </thead>
                 <tbody id="deleted-tbody"></tbody>
@@ -251,41 +228,10 @@
               <h4>Đơn Hàng</h4>
               <p>Báo cáo chi tiết số lượng và doanh thu theo từng đơn hàng</p>
             </div>
-            <div
-              class="report-box-card"
-              onclick="switchDashboardTab('products')"
-            >
+            <div class="report-box-card" onclick="switchDashboardTab('products')">
               <i class="fa-solid fa-cubes report-icon"></i>
               <h4>Mặt Hàng</h4>
               <p>Báo cáo số lượng và doanh thu trên từng mặt hàng</p>
-            </div>
-            <div class="report-box-card">
-              <i class="fa-solid fa-flask report-icon"></i>
-              <h4>Nguyên Liệu</h4>
-              <p>Báo cáo số lượng nguyên liệu đã được sử dụng</p>
-            </div>
-            <div class="report-box-card">
-              <i class="fa-solid fa-truck-ramp-box report-icon"></i>
-              <h4>Nhập / Xuất Kho</h4>
-              <p>Báo cáo lịch sử nhập kho và điều chỉnh kho</p>
-            </div>
-            <div
-              class="report-box-card"
-              onclick="switchDashboardTab('inventory')"
-            >
-              <i class="fa-solid fa-box-archive report-icon"></i>
-              <h4>Tồn Kho</h4>
-              <p>Báo cáo lịch sử tồn kho đầu kỳ và cuối kỳ chi tiết</p>
-            </div>
-            <div class="report-box-card">
-              <i class="fa-solid fa-users report-icon"></i>
-              <h4>Khách hàng <span class="badge-new-tag">NEW</span></h4>
-              <p>Xem danh sách tài khoản thành viên hệ thống</p>
-            </div>
-            <div class="report-box-card">
-              <i class="fa-solid fa-file-export report-icon"></i>
-              <h4>Xuất Báo Cáo</h4>
-              <p>Xem lịch sử và tải về tập tin báo cáo đã xuất</p>
             </div>
           </div>
         </section>
@@ -295,75 +241,59 @@
     <div id="quantity-modal" class="modal-overlay">
       <div class="modal-content">
         <div class="modal-header">
-          <h3 id="modal-title">Xác Nhận Số Lượng Thao Tác</h3>
-          <button
-            class="close-modal-btn"
-            onclick="
-              document.getElementById('quantity-modal').classList.remove('open')
-            "
-          >
-            &times;
-          </button>
+          <h3 id="modal-title">Cập Nhật Kho Sản Phẩm</h3>
+          <button class="close-modal-btn" onclick="document.getElementById('quantity-modal').classList.remove('open')">&times;</button>
         </div>
         <div class="modal-body">
-          <p id="modal-product-info">
-            Sản phẩm chọn:
-            <span
-              id="modal-p-name"
-              class="highlight-text"
-              style="color: #0066cc"
-              >...</span
-            >
-          </p>
-          <p id="modal-stock-info" style="color: #64748b; font-size: 0.9rem">
-            Số lượng hiện có trong kho:
-            <span id="modal-p-stock" style="color: #1e293b; font-weight: 600"
-              >0</span
-            >
-          </p>
-
-          <div style="margin-top: 1.25rem">
-            <label
-              for="modal-quantity-input"
-              style="
-                font-size: 0.8rem;
-                color: #64748b;
-                display: block;
-                margin-bottom: 0.5rem;
-                font-weight: 700;
-              "
-              >NHẬP SỐ LƯỢNG THỰC HIỆN:</label
-            >
-            <input
-              type="number"
-              id="modal-quantity-input"
-              min="1"
-              value="1"
-              style="width: 100%"
-            />
+          <div style="margin-top: 0.5rem;">
+            <label for="modal-qty-input" style="font-size: 0.85rem; color: #64748b; font-weight: 700;">SỐ LƯỢNG THAO TÁC KHO:</label>
+            <input type="number" id="modal-qty-input" placeholder="Nhập số lượng..." style="width: 100%; margin-top: 0.5rem;" />
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            class="btn-secondary"
-            onclick="
-              document.getElementById('quantity-modal').classList.remove('open')
-            "
-          >
-            Hủy Bỏ
-          </button>
-          <button
-            id="modal-confirm-btn"
-            style="
-              color: white;
-              border: none;
-              padding: 0.75rem 1.25rem;
-              border-radius: 8px;
-              font-weight: 600;
-              cursor: pointer;
-            "
-          >
-            Xác Nhận Hệ Thống
+          <button class="btn-secondary" onclick="document.getElementById('quantity-modal').classList.remove('open')">Hủy Bỏ</button>
+          <button id="modal-confirm-btn" style="color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Xác Nhận Hệ Thống</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="return-reason-modal" class="modal-overlay">
+      <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+          <h3 style="color: #f59e0b;"><i class="fa-solid fa-circle-question"></i> Yêu Cầu Đổi Ý Hoàn Đơn</h3>
+          <button class="close-modal-btn" onclick="document.getElementById('return-reason-modal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p style="margin-bottom: 1rem; color: #475569; font-size: 0.9rem;">
+            Mã giao dịch đơn: <span id="return-modal-oid" style="font-weight: 700; color: #0066cc;">DH001</span>
+          </p>
+          
+          <label style="font-weight: 700; font-size: 0.85rem; color: #1e293b; display: block; margin-bottom: 0.5rem;">VUI LÒNG CHỌN HÌNH THỨC ĐỔI Ý:</label>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
+            <label style="display: flex; align-items: center; gap: 0.75rem; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer;">
+              <input type="radio" name="return_action_type" value="cancel_refund" checked>
+              <div>
+                <strong style="color: #ef4444; display: block; margin-bottom: 2px;">Hủy đơn & Hoàn tiền</strong>
+                <div style="font-size: 0.75rem; color: #64748b;">Tôi muốn hủy hẳn giao dịch và nhận tiền lại.</div>
+              </div>
+            </label>
+            
+            <label style="display: flex; align-items: center; gap: 0.75rem; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer;">
+              <input type="radio" name="return_action_type" value="exchange_product">
+              <div>
+                <strong style="color: #0066cc; display: block; margin-bottom: 2px;">Yêu cầu đổi sản phẩm khác</strong>
+                <div style="font-size: 0.75rem; color: #64748b;">Sản phẩm bị nhầm mẫu, sai thông số hoặc muốn đổi cái khác.</div>
+              </div>
+            </label>
+          </div>
+
+          <label style="font-weight: 700; font-size: 0.85rem; color: #1e293b; display: block; margin-bottom: 0.5rem;">LÝ DO CHI TIẾT (TÙY CHỌN):</label>
+          <textarea id="return-reason-text" rows="3" placeholder="Ghi lý do chi tiết để cửa hàng duyệt nhanh hơn..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; resize: none; font-family: inherit; outline: none;"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="document.getElementById('return-reason-modal').classList.remove('open')">Đóng lại</button>
+          <button id="return-submit-btn" style="background-color: #f59e0b; color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+            Xác Nhận Gửi Cửa Hàng
           </button>
         </div>
       </div>
@@ -387,8 +317,15 @@
           activeBtn.classList.add("active");
         }
       }
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() => console.log("Service Worker hoạt động ổn định."))
+          .catch((err) => console.log("Lỗi SW:", err));
+      }
     </script>
 
-    <script type="py" src="./main.py"></script>
+    <script type="py" src="./main.py" config='{"packages":["json", "datetime"]}'></script>
   </body>
 </html>
