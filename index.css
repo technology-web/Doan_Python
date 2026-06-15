@@ -1222,59 +1222,121 @@ tr:hover td {
   }
 }
 
+/* ======================================================== */
+/* 🎨 ĐỊNH DẠNG HỆ MÀU GRADIENT VÀ ĐỔ BÓNG CHO CÁC NÚT BẤM  */
+/* ======================================================== */
 
-/* Style cho nhóm nút hành động tách rời trong bảng đơn hàng */
+/* Style nền tảng chung cho nút hành động */
 .action-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;      
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 600;       
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;     
   cursor: pointer;
-  transition: all 0.2s ease;
-  color: white;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+  color: white !important; 
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hiệu ứng đưa chuột vào (Hover) chung */
+.action-btn:hover {
+  transform: translateY(-2px); 
+  filter: brightness(1.1);     
+}
+
+/* Hiệu ứng khi nhấn giữ nút (Active) */
+.action-btn:active {
+  transform: translateY(1px);  
 }
 
 .action-btn i {
   font-size: 12px;
 }
 
-/* Nút Hủy Đơn - Màu đỏ */
-.btn-danger {
-  background-color: #ef4444;
+/* 1. Nút Hủy Đơn - Đỏ Gradient + Đổ bóng mềm */
+.action-btn.cancel-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25) !important;
 }
-.btn-danger:hover {
-  background-color: #dc2626;
-}
-
-/* Nút Hoàn Tiền - Màu cam/vàng */
-.btn-warning {
-  background-color: #f59e0b;
-}
-.btn-warning:hover {
-  background-color: #d97706;
+.action-btn.cancel-btn:hover {
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4) !important;
 }
 
-/* Nút Đổi Hàng - Màu xanh dương */
-.btn-blue {
-  background-color: #3b82f6;
+/* 2. Nút Đổi Trả - Xanh Dương Gradient + Đổ bóng hoàng gia */
+.action-btn.exchange-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25) !important;
 }
-.btn-blue:hover {
-  background-color: #2563eb;
+.action-btn.exchange-btn:hover {
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4) !important;
 }
 
-/* Badge trạng thái */
-.badge {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
+/* 3. Nút Duyệt (Hoàn tiền / Đổi trả) - Xanh Lá Gradient */
+.action-btn.approve-btn {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25) !important;
 }
-.badge-info { background-color: #e0f2fe; color: #0369a1; }
-.badge-danger { background-color: #fee2e2; color: #b91c1c; }
-.badge-warning { background-color: #fef3c7; color: #b45309; }
+.action-btn.approve-btn:hover {
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4) !important;
+}
 
 
+
+/* Cập nhật trong index.css */
+.modal-content {
+  background: #ffffff;
+  width: 90%;
+  max-width: 450px;
+  border-radius: 16px; /* Bo góc tròn hơn */
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Đổ bóng sâu hơn */
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.modal-footer {
+  border-top: none; /* Bỏ đường kẻ trên footer để nhìn thoáng hơn */
+  padding-top: 20px;
+  gap: 12px;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 20px;
+  transition: background 0.2s;
+}
+
+/* Nút xác nhận trong modal */
+#modal-confirm-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: filter 0.2s;
+}
+
+/* Cập nhật trong index.css */
+tbody tr:nth-child(even) {
+  background-color: #fcfcfc;
+}
+
+/* Tăng khoảng cách trong cell để trông thoáng đãng */
+td {
+  padding: 14px 16px;
+  color: #334155;
+}
+
+th {
+  padding: 14px 16px;
+  background: #f1f5f9 !important; /* Màu nền header dịu hơn */
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.action-btn:active {
+  transform: scale(0.97); /* Hiệu ứng nhấn nút thu nhỏ nhẹ */
+}

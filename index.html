@@ -6,43 +6,45 @@
     <title>GCP Management - Hệ Thống Quản Lý Sản Phẩm</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://pyscript.net/releases/2024.1.1/core.css"
-    />
-    <script
-      type="module"
-      src="https://pyscript.net/releases/2024.1.1/core.js"
-    ></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     <link rel="stylesheet" href="index.css" />
+    <style>
+      .report-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .report-stat-card {
+        background: #fff;
+        padding: 1.25rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-left: 4px solid #cbd5e1;
+      }
+      .report-stat-card.revenue { border-left-color: #10b981; }
+      .report-stat-card.cost { border-left-color: #f59e0b; }
+      .report-stat-card.profit { border-left-color: #3b82f6; }
+      .report-stat-card.loss { border-left-color: #ef4444; }
+    </style>
   </head>
   <body>
     <div class="dashboard-container">
       <aside class="sidebar-left">
         <div class="admin-brand">
-          <div class="logo-box">
-            <i class="fa-solid fa-layer-group"></i>
-          </div>
-          <div>
-            <h2>Hetech</h2>
-            
-          </div>
+          <div class="logo-box"><i class="fa-solid fa-layer-group"></i></div>
+          <div><h2>Hetech</h2></div>
         </div>
 
         <div class="user-profile-box">
-          <div class="avatar-circle">
-            <i class="fa-solid fa-user-gear"></i>
-          </div>
+          <div class="avatar-circle"><i class="fa-solid fa-user-gear"></i></div>
           <div class="user-info-text">
             <p class="u-name">Admin</p>
             <p class="u-id">ID: 202607</p>
@@ -50,38 +52,22 @@
         </div>
 
         <nav class="menu-navigation">
-          <button
-            class="menu-btn active"
-            id="btn-tab-orders"
-            onclick="switchDashboardTab('orders')"
-          >
+          <button class="menu-btn active" id="btn-tab-orders" onclick="switchDashboardTab('orders')">
             <i class="fa-solid fa-cart-shopping"></i> Đơn Hàng Đặt
           </button>
-          <button
-            class="menu-btn"
-            id="btn-tab-products"
-            onclick="switchDashboardTab('products')"
-          >
+          <button class="menu-btn" id="btn-tab-products" onclick="switchDashboardTab('products')">
             <i class="fa-solid fa-boxes-stacked"></i> Mặt Hàng Web
           </button>
-          <button
-            class="menu-btn"
-            id="btn-tab-inventory"
-            onclick="switchDashboardTab('inventory')"
-          >
+          <button class="menu-btn" id="btn-tab-inventory" onclick="switchDashboardTab('inventory')">
             <i class="fa-solid fa-warehouse"></i> Tồn Kho Thực Tế
           </button>
-          <button
-            class="menu-btn"
-            id="btn-tab-reports"
-            onclick="switchDashboardTab('reports')"
-          >
+          <button class="menu-btn" id="btn-tab-reports" onclick="switchDashboardTab('reports')">
             <i class="fa-solid fa-chart-pie"></i> Báo Cáo Hệ Thống
           </button>
         </nav>
 
         <div class="sidebar-footer">
-          <p>© 2026 <strong>GCP</strong></p>
+          <!-- <p>© 2026 <strong>GCP</strong></p> -->
         </div>
       </aside>
 
@@ -89,7 +75,7 @@
         <div class="top-stats-bar">
           <div class="stat-mini-card">
             <div class="stat-info">
-              <span class="stat-label">Tổng Mặt Hàng</span>
+              <span class="stat-label">Tổng Mặt Hàng (Kho)</span>
               <span class="stat-value" id="total-products-qty">0 cái</span>
             </div>
             <i class="fa-solid fa-box stat-icon-bg"></i>
@@ -114,18 +100,24 @@
           <div class="management-card">
             <div class="gcp-filter-container">
               <div class="filter-row-inputs">
-                <select class="gcp-select">
-                  <option>Tất cả trạng thái</option>
+              <select class="gcp-select" id="filter-status">
+                  <option value="all">Tất cả trạng thái</option>
+                  <option value="paid">Đã thanh toán</option>
+                  <option value="kiemtuan">Kiểm kho</option>
+                  <option value="return_pending">Chờ duyệt hoàn tiền</option>
+                  <option value="exchange_pending">Chờ duyệt đổi hàng</option>
+                  <option value="refunded">Đã hoàn trả kho</option>
                 </select>
-                <select class="gcp-select">
-                  <option>Tất cả danh mục</option>
+                <!-- Đoạn code mới đã được đưa vào đây -->
+                <select class="gcp-select" id="filter-category">
+                  <option value="all">Tất cả danh mục</option>
+                  <option value="Xuất bán hàng">Xuất kho bán lẻ</option>
+                  <option value="Nhập kho">Nhập kho bổ sung</option>
+                  <option value="Xóa danh mục">Xóa danh mục / Thất thoát</option>
                 </select>
-                <input
-                  type="text"
-                  id="search-order"
-                  placeholder="Tìm kiếm mã đơn hoặc tên sản phẩm..."
-                />
-              </div>
+  
+                  <input type="text" id="search-order" placeholder="Tìm kiếm mã đơn hoặc tên sản phẩm..." />
+</div>
             </div>
 
             <div class="table-container">
@@ -133,8 +125,8 @@
                 <thead>
                   <tr>
                     <th width="15%">THỜI GIAN</th>
-                    <th width="15%">MÃ ĐƠN</th>
-                    <th width="25%">NỘI DUNG CHI TIẾT</th>
+                    <th width="12%">MÃ ĐƠN</th>
+                    <th width="28%">NỘI DUNG CHI TIẾT</th>
                     <th width="15%">GIÁ TRỊ ĐƠN</th>
                     <th width="15%">TRẠNG THÁI</th>
                     <th width="15%">THAO TÁC</th>
@@ -148,25 +140,12 @@
 
         <section id="tab-products" class="dashboard-section">
           <div class="management-card" style="margin-bottom: 2rem">
-            <h3>
-              <i class="fa-solid fa-circle-plus color-green"></i> Tạo Mặt Hàng Mới Lên Hệ Thống
-            </h3>
+            <h3><i class="fa-solid fa-circle-plus color-green"></i> Tạo Mặt Hàng Mới Lên Hệ Thống</h3>
             <div class="form-group">
-              <input
-                type="text"
-                id="product-name"
-                placeholder="Tên sản phẩm thiết bị cần thêm..."
-              />
-              <input
-                type="number"
-                id="product-price"
-                placeholder="Giá niêm yết (VNĐ)..."
-              />
-              <input
-                type="number"
-                id="product-quantity"
-                placeholder="Số lượng nhập kho..."
-              />
+              <input type="text" id="product-name" placeholder="Tên sản phẩm thiết bị..." />
+              <input type="number" id="product-cost" placeholder="Giá vốn / Giá nhập (VNĐ)..." />
+              <input type="number" id="product-price" placeholder="Giá bán niêm yết (VNĐ)..." />
+              <input type="number" id="product-quantity" placeholder="Số lượng nhập kho..." />
               <button id="add-btn" type="button" class="primary-btn">
                 <i class="fa-solid fa-plus"></i> Thêm Mặt Hàng
               </button>
@@ -175,19 +154,15 @@
 
           <div class="management-card">
             <div class="card-header-row">
-              <input
-                type="text"
-                id="search-input"
-                placeholder="🔍 Lọc tìm kiếm sản phẩm nhanh..."
-                style="width: 100%"
-              />
+              <input type="text" id="search-input" placeholder="🔍 Lọc tìm kiếm sản phẩm nhanh..." style="width: 100%" />
             </div>
             <div class="table-container">
               <table>
                 <thead>
                   <tr>
                     <th>Tên Sản Phẩm Công Nghệ</th>
-                    <th>Đơn Giá</th>
+                    <th>Giá Vốn (Nhập)</th>
+                    <th>Giá Bán (Ra)</th>
                     <th>Số Lượng Tồn</th>
                     <th>Thao Tác Nghiệp Vụ</th>
                   </tr>
@@ -200,14 +175,15 @@
 
         <section id="tab-inventory" class="dashboard-section">
           <div class="management-card">
-            <h3><i class="fa-solid fa-warehouse"></i> Thùng Rác Biến Động</h3>
+            <h3><i class="fa-solid fa-warehouse"></i> Thùng Rác Biến Động (Hàng Hủy / Thất Thoát)</h3>
             <div class="table-container" style="margin-top: 1rem;">
               <table>
                 <thead>
                   <tr>
                     <th>Tên Sản Phẩm Đã Hủy</th>
-                    <th>Đơn Giá Lúc Xóa</th>
-                    <th>Số Lượng Thu Hồi</th>
+                    <th>Giá Vốn Lúc Xóa</th>
+                    <th>Số Lượng Hủy / Mất</th>
+                    <th>Giá Trị Thất Thoát</th>
                   </tr>
                 </thead>
                 <tbody id="deleted-tbody"></tbody>
@@ -217,21 +193,56 @@
         </section>
 
         <section id="tab-reports" class="dashboard-section">
-          <div class="gcp-report-grid">
-            <div class="report-box-card" onclick="switchDashboardTab('orders')">
-              <i class="fa-solid fa-clock-history report-icon"></i>
-              <h4>Giao Ca</h4>
-              <p>Báo cáo lịch sử và doanh thu các lần giao ca</p>
+          <div class="management-card">
+            <h3><i class="fa-solid fa-chart-pie"></i> Báo Cáo Kiểm Kê Tài Chính Hệ Thống</h3>
+            
+            <div class="report-summary-grid">
+              <div class="report-stat-card revenue">
+                <div>
+                  <span style="font-size:0.85rem; color:#64748b; font-weight:600;">DOANH THU THUẦN</span>
+                  <h3 id="rep-revenue" style="font-size:1.4rem; color:#10b981; margin-top:0.25rem;">0 đ</h3>
+                </div>
+                <i class="fa-solid fa-sack-dollar" style="font-size:2rem; color:#a7f3d0;"></i>
+              </div>
+              
+              <div class="report-stat-card cost">
+                <div>
+                  <span style="font-size:0.85rem; color:#64748b; font-weight:600;">TỔNG GIÁ VỐN</span>
+                  <h3 id="rep-cost" style="font-size:1.4rem; color:#f59e0b; margin-top:0.25rem;">0 đ</h3>
+                </div>
+                <i class="fa-solid fa-money-bill-wave" style="font-size:2rem; color:#fef3c7;"></i>
+              </div>
+
+              <div class="report-stat-card profit" id="profit-card-border">
+                <div>
+                  <span style="font-size:0.85rem; color:#64748b; font-weight:600;">LỢI NHUẬN THỰC TẾ</span>
+                  <h3 id="rep-profit" style="font-size:1.4rem; color:#3b82f6; margin-top:0.25rem;">0 đ</h3>
+                </div>
+                <i class="fa-solid fa-chart-line" style="font-size:2rem; color:#dbeafe;"></i>
+              </div>
+
+              <div class="report-stat-card loss">
+                <div>
+                  <span style="font-size:0.85rem; color:#64748b; font-weight:600;">THẤT THOÁT / HỦY HÀNG</span>
+                  <h3 id="rep-loss" style="font-size:1.4rem; color:#ef4444; margin-top:0.25rem;">0 đ</h3>
+                </div>
+                <i class="fa-solid fa-dumpster-fire" style="font-size:2rem; color:#fee2e2;"></i>
+              </div>
             </div>
-            <div class="report-box-card" onclick="switchDashboardTab('orders')">
-              <i class="fa-solid fa-chart-line report-icon"></i>
-              <h4>Đơn Hàng</h4>
-              <p>Báo cáo chi tiết số lượng và doanh thu theo từng đơn hàng</p>
-            </div>
-            <div class="report-box-card" onclick="switchDashboardTab('products')">
-              <i class="fa-solid fa-cubes report-icon"></i>
-              <h4>Mặt Hàng</h4>
-              <p>Báo cáo số lượng và doanh thu trên từng mặt hàng</p>
+
+            <h4><i class="fa-solid fa-list-check"></i> Phân Tích Chỉ Số Đơn Hàng</h4>
+            <div class="table-container" style="margin-top: 1rem;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Chỉ số đơn hàng</th>
+                    <th>Số lượng đơn</th>
+                    <th>Tổng giá trị dòng tiền</th>
+                    <th>Ghi chú vận hành</th>
+                  </tr>
+                </thead>
+                <tbody id="report-orders-tbody"></tbody>
+              </table>
             </div>
           </div>
         </section>
@@ -248,6 +259,8 @@
           <div style="margin-top: 0.5rem;">
             <label for="modal-qty-input" style="font-size: 0.85rem; color: #64748b; font-weight: 700;">SỐ LƯỢNG THAO TÁC KHO:</label>
             <input type="number" id="modal-qty-input" placeholder="Nhập số lượng..." style="width: 100%; margin-top: 0.5rem;" />
+          
+          
           </div>
         </div>
         <div class="modal-footer">
@@ -260,21 +273,19 @@
     <div id="modal-cancel-refund" class="modal-overlay">
       <div class="modal-content" style="max-width: 450px; border-top: 5px solid #ef4444;">
         <div class="modal-header">
-          <h3 style="color: #ef4444;"><i class="fa-solid fa-circle-xmark"></i> Yêu Cầu Hủy Đơn & Hoàn Tiền</h3>
+          <h3><i class="fa-solid fa-circle-xmark"></i> Yêu Cầu Hủy Đơn & Hoàn Tiền</h3>
           <button class="close-modal-btn" type="button" onclick="document.getElementById('modal-cancel-refund').classList.remove('open')">&times;</button>
         </div>
         <div class="modal-body">
-          <p style="margin-bottom: 1rem; color: #475569; font-size: 0.9rem;">
-            Đang xử lý hủy đơn: <span id="cancel-modal-oid" style="font-weight: 700; color: #ef4444;">DH000</span>
-          </p>
-          <label style="font-weight: 700; font-size: 0.85rem; color: #1e293b; display: block; margin-bottom: 0.5rem;">LÝ DO HỦY ĐƠN HOÀN TIỀN:</label>
-          <textarea id="cancel-reason-text" rows="3" placeholder="Nhập lý do hủy đơn (ví dụ: Đổi ý không mua nữa, đặt nhầm sản phẩm...)" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; resize: none; font-family: inherit; outline: none;"></textarea>
+          <p style="margin-bottom: 1rem; color: #475569; font-size: 0.9rem;">Đang xử lý đơn: <span id="cancel-modal-oid" style="font-weight: 700; color: #ef4444;">DH000</span></p>
+          <label style="font-weight: 700; font-size: 0.85rem; color: #1e293b; display: block; margin-bottom: 0.5rem;">LÝ DO HỦY ĐƠN:</label>
+          <textarea id="cancel-reason-text" rows="3" class="gcp-select" style="width:100%; height:auto; resize:none;" placeholder="Nhập lý do..."></textarea>
+        
+        <p class="error-text" id="cancel-error-msg" style="margin-top: 0.5rem; min-height: 20px; color: #ef4444; font-size: 0.85rem;"></p>
         </div>
         <div class="modal-footer">
           <button class="btn-secondary" type="button" onclick="document.getElementById('modal-cancel-refund').classList.remove('open')">Đóng lại</button>
-          <button id="cancel-submit-btn" type="button" style="background-color: #ef4444; color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
-            Xác Nhận Hủy Đơn
-          </button>
+          <button id="cancel-submit-btn" type="button" style="background-color: #ef4444; color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Xác Nhận Hủy Đơn</button>
         </div>
       </div>
     </div>
@@ -282,47 +293,87 @@
     <div id="modal-exchange-product" class="modal-overlay">
       <div class="modal-content" style="max-width: 450px; border-top: 5px solid #3b82f6;">
         <div class="modal-header">
-          <h3 style="color: #3b82f6;"><i class="fa-solid fa-arrows-rotate"></i> Yêu Cầu Đổi Trả Sản Phẩm</h3>
+          <h3><i class="fa-solid fa-arrows-rotate"></i> Yêu Cầu Đổi Trả Sản Phẩm</h3>
           <button class="close-modal-btn" type="button" onclick="document.getElementById('modal-exchange-product').classList.remove('open')">&times;</button>
         </div>
         <div class="modal-body">
-          <p style="margin-bottom: 1rem; color: #475569; font-size: 0.9rem;">
-            Đang xử lý đổi hàng đơn: <span id="exchange-modal-oid" style="font-weight: 700; color: #3b82f6;">DH000</span>
-          </p>
+          <p style="margin-bottom: 1rem; color: #475569; font-size: 0.9rem;">Đang đổi trả đơn: <span id="exchange-modal-oid" style="font-weight: 700; color: #3b82f6;">DH000</span></p>
           <label style="font-weight: 700; font-size: 0.85rem; color: #1e293b; display: block; margin-bottom: 0.5rem;">LÝ DO ĐỔI TRẢ MẶT HÀNG:</label>
-          <textarea id="exchange-reason-text" rows="3" placeholder="Nhập lý do đổi trả (ví dụ: Sản phẩm bị lỗi kỹ thuật, sai kích thước, giao nhầm màu...)" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; resize: none; font-family: inherit; outline: none;"></textarea>
+          <textarea id="exchange-reason-text" rows="3" class="gcp-select" style="width:100%; height:auto; resize:none;" placeholder="Nhập lý do lỗi..."></textarea>
+        
+          <p class="error-text" id="cancel-error-msg" style="margin-top: 0.5rem; min-height: 20px; color: #ef4444; font-size: 0.85rem;"></p>
         </div>
         <div class="modal-footer">
           <button class="btn-secondary" type="button" onclick="document.getElementById('modal-exchange-product').classList.remove('open')">Đóng lại</button>
-          <button id="exchange-submit-btn" type="button" style="background-color: #3b82f6; color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
-            Xác Nhận Đổi Hàng
-          </button>
+          <button id="exchange-submit-btn" type="button" style="background-color: #3b82f6; color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Xác Nhận Đổi Hàng</button>
         </div>
       </div>
     </div>
 
     <script>
       function switchDashboardTab(tabName) {
-        document.querySelectorAll(".dashboard-section").forEach((sec) => {
-          sec.classList.remove("active-section");
-        });
+        document.querySelectorAll(".dashboard-section").forEach((sec) => sec.classList.remove("active-section"));
         const targetSection = document.getElementById("tab-" + tabName);
-        if (targetSection) {
-          targetSection.classList.add("active-section");
-        }
+        if (targetSection) targetSection.classList.add("active-section");
 
-        document.querySelectorAll(".menu-btn").forEach((btn) => {
-          btn.classList.remove("active");
-        });
+        document.querySelectorAll(".menu-btn").forEach((btn) => btn.classList.remove("active"));
         const activeBtn = document.getElementById("btn-tab-" + tabName);
-        if (activeBtn) {
-          activeBtn.classList.add("active");
-        }
+        if (activeBtn) activeBtn.classList.add("active");
       }
-
-      
     </script>
-
     <script type="py" src="./main.py"></script>
+    
+
+
+    <div id="custom-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
+    <div style="background: white; padding: 20px; border-radius: 12px; width: 350px; text-align: center;">
+        <p id="modal-message" style="margin-bottom: 20px;">Thông báo</p>
+        <div id="modal-actions">
+            <button id="btn-ok" onclick="confirmAction()">OK</button>
+            <button onclick="closeModal()">Huỷ</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showNotification(message) {
+        document.getElementById('modal-message').innerText = message;
+        document.getElementById('custom-modal').style.display = 'flex';
+    }
+    function closeModal() {
+        document.getElementById('custom-modal').style.display = 'none';
+    }
+</script>
+<script>
+    let currentAction = null;
+
+    // Hàm hiện thông báo thường (chỉ nút OK)
+    function showNotification(message) {
+        document.getElementById('modal-message').innerText = message;
+        document.getElementById('modal-actions').innerHTML = 
+            '<button onclick="closeModal()" style="background:#2563eb; color:white; padding:8px 20px; border-radius:6px; cursor:pointer;">OK</button>';
+        document.getElementById('custom-modal').style.display = 'flex';
+    }
+
+    // Hàm hiện thông báo xác nhận (OK + Hủy)
+    function showModal(message, callback) {
+        document.getElementById('modal-message').innerText = message;
+        currentAction = callback;
+        document.getElementById('modal-actions').innerHTML = 
+            '<button onclick="executeAction()" style="background:#2563eb; color:white; padding:8px 20px; border-radius:6px; margin-right:10px; cursor:pointer;">OK</button>' +
+            '<button onclick="closeModal()" style="background:#e2e8f0; padding:8px 20px; border-radius:6px; cursor:pointer;">Huỷ</button>';
+        document.getElementById('custom-modal').style.display = 'flex';
+    }
+
+    function executeAction() {
+        if (currentAction) currentAction(); // Chạy hàm callback từ Python
+        closeModal();
+    }
+
+    function closeModal() {
+        document.getElementById('custom-modal').style.display = 'none';
+    }
+</script>
+
   </body>
 </html>
